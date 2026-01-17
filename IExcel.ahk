@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 #Singleinstance Force
 /*										I Excel 
-v1.06
+v1.061
 */
 
 SendMode "input"
@@ -15,7 +15,7 @@ Global GoogleLowerBarCoordx := "467"
 Global GoogleLowerBarCoordy := "1099"
 Global SelectionMade := ""
 Global ShowFirstMsgDox := IniRead("IExcel.ini",  "HelpPopup",  "Show",  2)
-Global CurrentVersion := "1.06`n" 
+Global CurrentVersion := "1.061`n" 
 Global VersionUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/Version.txt" 
 Global DownloadUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/IExcel.ahk"
 CheckForUpdates() {
@@ -128,6 +128,7 @@ RemoveTooltip() {
 	while PixelGetColor(631, 576) == 0x28292a {
 		sleep 50
 	}
+	sleep 400
 	loop {
 		send "{Enter}"
 		sleep 1000
@@ -144,3 +145,4 @@ Send "{Backspace}"
 Send "{Backspace}"
 Exitapp
 }
+
