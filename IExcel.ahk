@@ -1,7 +1,7 @@
 ﻿#Requires AutoHotkey v2.0
 #Singleinstance Force
 /*										I Excel 
-v1.3
+v1.04
 */
 
 SendMode "input"
@@ -142,3 +142,4 @@ Send "{Backspace}"
 Exitapp
 
 }
+
