@@ -1,7 +1,7 @@
 # I-excel
 Takes a screenshot of specific point and asks AI about it
 
-v1.061
+v1.062
 
 # Setup
 # Download Ahk
@@ -12,6 +12,8 @@ Open the file, in case you don't have admin access select current user and then 
 Bookmarks bar open, it can be opened by pressing Ctrl+Shift+B
 
 Make sure that chrome is the default browser, to assure it is go to [chrome://settings/defaultBrowser](url).
+
+Another Chrome setting is the dark mode, to set it go to: [chrome://settings/appearance](url) and press apearence and dark
 
 ## Snipping Tool
 After that, go to settings>notifications then turn off Snipping Tool notifications.
@@ -26,3 +28,15 @@ Hover over the colors until you get blue
 
 # Download
 You will find the download here: https://github.com/lusgas-dev/I-excel/releases/tag/v1.06
+
+### Keybinds
+Press ; + h for help (goes to this website and shows a popup with enough information after setup)
+Press ; + j to set the corners of the screenshot being taken
+Press ; + c to start the main function
+Press ; + e to exit
+Press ; + r to reload
+in case of errors where you get soft locked press ; + r
+
+
+
+
