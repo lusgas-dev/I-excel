@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 #Singleinstance Force
 /*										I Excel 
-v1.05
+v1.06
 */
 
 SendMode "input"
@@ -15,7 +15,7 @@ Global GoogleLowerBarCoordx := "467"
 Global GoogleLowerBarCoordy := "1099"
 Global SelectionMade := ""
 Global ShowFirstMsgDox := IniRead("IExcel.ini",  "HelpPopup",  "Show",  2)
-Global CurrentVersion := "1.05" 
+Global CurrentVersion := "1.06`n" 
 Global VersionUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/Version.txt" 
 Global DownloadUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/IExcel.ahk"
 CheckForUpdates() {
@@ -27,7 +27,7 @@ CheckForUpdates() {
         whr.Open("GET", VersionUrl, false)
         whr.Send()
         whr.WaitForResponse()
-        LatestVersion := trim(whr.ResponseText)
+        Global LatestVersion := trim(whr.ResponseText)
 
         if (LatestVersion != CurrentVersion) {
 		Result := MsgBox("An update is available (v" LatestVersion ") Would you like to download and install it now?", "Update Available", "YesNo Icon?")
@@ -144,4 +144,3 @@ Send "{Backspace}"
 Send "{Backspace}"
 Exitapp
 }
-
