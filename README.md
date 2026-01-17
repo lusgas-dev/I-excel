@@ -23,3 +23,6 @@ Make sure the color is set to blue
 Color can be changed at: Personalization>Colors
 
 Hover over the colors until you get blue
+
+# Download
+You will find the download here: https://github.com/lusgas-dev/I-excel/releases/tag/v1.06
