@@ -15,7 +15,7 @@ Global GoogleLowerBarCoordx := "467"
 Global GoogleLowerBarCoordy := "1099"
 Global SelectionMade := ""
 Global ShowFirstMsgDox := IniRead("IExcel.ini",  "HelpPopup",  "Show",  2)
-Global CurrentVersion := "1.04" 
+Global CurrentVersion := "1.05" 
 Global VersionUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/Version.txt" 
 Global DownloadUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/IExcel.ahk"
 CheckForUpdates() {
@@ -144,3 +144,4 @@ Send "{Backspace}"
 Send "{Backspace}"
 Exitapp
 }
+
