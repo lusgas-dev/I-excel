@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 #Singleinstance Force
 /*										I Excel 
-v1.062
+v1.063
 */
 
 SendMode "input"
@@ -16,7 +16,7 @@ Global GoogleLowerBarCoordx := "483"
 Global GoogleLowerBarCoordy := "1098"
 Global SelectionMade := ""
 Global ShowFirstMsgDox := IniRead("IExcel.ini",  "HelpPopup",  "Show",  2)
-Global CurrentVersion := "1.062" 
+Global CurrentVersion := "1.063" 
 Global VersionUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/Version.txt" 
 Global DownloadUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/IExcel.ahk"
 CheckForUpdates() {
@@ -29,7 +29,8 @@ CheckForUpdates() {
         whr.Send()
         whr.WaitForResponse()
         Global LatestVersion := trim(whr.ResponseText, " `t`r`n")
-
+        Global NewScriptName := ("IExcel_" LatestVersion ".ahk")
+        Global NewScriptPath := Format("{}\{}", A_ScriptDir, NewScriptName)
         if (LatestVersion != CurrentVersion) {
 		Result := MsgBox("An update is available (v" LatestVersion ")`nWould you like to download and install it now?`nYour version: (v" CurrentVersion ")", "Update Available", "YesNo Icon?")
             if (Result == "Yes") {
@@ -38,9 +39,9 @@ CheckForUpdates() {
                 whr.WaitForResponse()
                 NewScriptContent := whr.ResponseText
                 FileDelete A_ScriptFullPath
-                FileAppend NewScriptContent, A_ScriptFullPath
+                FileAppend NewScriptContent, NewScriptPath
                 MsgBox("Update complete. The script will now reload.", "Update Successful")
-                Reload
+                Run NewScriptPath
             }
         }
     } catch {
@@ -111,32 +112,35 @@ RemoveTooltip() {
 	Global Scr2x
 	Global Scr2y
 	if SelectionMade == 1{
-	Send "{Backspace}"
-	Send "{PrintScreen}"
-	WinWait("ahk_exe SnippingTool.exe")
-	sleep 500
-	MouseClickDrag "L", Scr1x, Scr1y, Scr2x, Scr2y, 90
-	sleep 50
-	CaptureX := ""
-	While CaptureX == ""  {
-		PixelSearch &CaptureX, &CaptureY, 0, 79, 1920, 1130, CBC
-	}
-	Click CaptureX, CaptureY
-	Run "https://www.google.com/"
-	loop {
+		Send "{Backspace}"
+		Send "{PrintScreen}"
+		WinWait("ahk_exe SnippingTool.exe")
+		sleep 500
+		MouseClickDrag "L", Scr1x, Scr1y, Scr2x, Scr2y, 90
 		sleep 50
-	} until PixelGetColor(GoogleLowerBarCoordx, GoogleLowerBarCoordy) == GoogleLowerBarDark
-	global Debug := PixelGetColor(GoogleLowerBarCoordx, GoogleLowerBarCoordy) == GoogleLowerBarDark
-	loop {
-			Sleep 100
+		CaptureX := ""
+		While CaptureX == ""  {
+			PixelSearch &CaptureX, &CaptureY, 0, 79, 1920, 1130, CBC
+		}
+		Click CaptureX, CaptureY
+		Run "https://www.google.com/"
+		loop {
+			sleep 50
+		} until PixelGetColor(GoogleLowerBarCoordx, GoogleLowerBarCoordy) == GoogleLowerBarDark
+		global Debug := PixelGetColor(GoogleLowerBarCoordx, GoogleLowerBarCoordy) == GoogleLowerBarDark
+		LoadingX := ""
+		while LoadingX == "" {
 			send "^v"
-	} until PixelGetColor(631, 576) == 0x28292a
-	
-	sleep 400
-	loop {
-		send "{Enter}"
-		sleep 1000
-	} until PixelGetColor(41, 260) == 0x0DBC5F
+			sleep 5
+			PixelSearch &LoadingX, &LoadingY, 36, 215, 1637, 830, 0x28292a
+		}
+		sleep 400
+		GaiX := ""
+		while GaiX == "" {
+			send "{Enter}"
+			sleep 1000
+			PixelSearch &GaiX, &GaiY, 0, 87, 319, 313, 0x0DBC5F
+		}
 	} else {
 		MsgBox "No area was selected, press `;+h for help"
 	}
