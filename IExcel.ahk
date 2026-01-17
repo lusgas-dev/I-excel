@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 #Singleinstance Force
 /*										I Excel 
-v1.061
+v1.062
 */
 
 SendMode "input"
@@ -10,12 +10,13 @@ CoordMode "Pixel"
 CoordMode "ToolTip",  "Screen"
 Global CBC := "0x4CC2FF"
 Global CBCH := "0x48B2E9"
-Global GoogleLowerBar := "0x171717"
-Global GoogleLowerBarCoordx := "467"
-Global GoogleLowerBarCoordy := "1099"
+Global GoogleLowerBarDark := "0x171717"
+Global GoogleLowerBarLight := ""
+Global GoogleLowerBarCoordx := "483"
+Global GoogleLowerBarCoordy := "1098"
 Global SelectionMade := ""
 Global ShowFirstMsgDox := IniRead("IExcel.ini",  "HelpPopup",  "Show",  2)
-Global CurrentVersion := "1.061`n" 
+Global CurrentVersion := "1.062" 
 Global VersionUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/Version.txt" 
 Global DownloadUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/IExcel.ahk"
 CheckForUpdates() {
@@ -27,10 +28,10 @@ CheckForUpdates() {
         whr.Open("GET", VersionUrl, false)
         whr.Send()
         whr.WaitForResponse()
-        Global LatestVersion := trim(whr.ResponseText)
+        Global LatestVersion := trim(whr.ResponseText, " `t`r`n")
 
         if (LatestVersion != CurrentVersion) {
-		Result := MsgBox("An update is available (v" LatestVersion ") Would you like to download and install it now?", "Update Available", "YesNo Icon?")
+		Result := MsgBox("An update is available (v" LatestVersion ")`nWould you like to download and install it now?`nYour version: (v" CurrentVersion ")", "Update Available", "YesNo Icon?")
             if (Result == "Yes") {
                 whr.Open("GET", DownloadUrl, false)
                 whr.Send()
@@ -50,7 +51,7 @@ CheckForUpdates()
 if ShowFirstMsgDox == 0 {
 OnMessage(WM_HELP := 0x0053, (*) => IExcelHelp())
 	g := Gui("+OwnDialogs")
-	fmsgDox := MsgBox("Press `;+h for help or button help below", "TOTALLY NOT cheats", 16384)
+	fmsgDox := MsgBox("Press `;+h for help or button help below", "TOTALLY NOT cheats", 20480)
 	if fmsgDox == "OK"{
 		SMsgDox := MsgBox("Show this popup next time?", "" , 260)
 		if SMsgDox == "No" {
@@ -68,7 +69,10 @@ OnMessage(WM_HELP := 0x0053, (*) => IExcelHelp())
 			Reload
 			}
 IExcelHelp() {
-	MsgBox "MAKE SURE CHROME IS THE DEFAULT BROWSER IN DARK MODE`nFirst press `;+j then select the coordinates (Left top and right botton of a screenshot) by pressing J `nTo start the program, press `;+c`nIn case of any errors restart or press `;+r", "Help", 32
+	Result := MsgBox("`nFirst press `;+j then select the coordinates (area of the screenshot) by pressing J `nTo start the program, press `;+c`nIn case of any errors restart or press `;+r`n`nWould you like to open the website for more complete instructions?", "Help", 4132)
+	If Result == "Yes" {
+		Run "https://github.com/lusgas-dev/I-excel"
+	}
 }
 ~; & j:: {
 	ToolTip "Press J to select the first corner of the screenshot"
@@ -97,7 +101,7 @@ RemoveTooltip() {
 	Settimer () => Tooltip(), -3000
 }
 ~; & c::{
-	Global GoogleLowerBar
+	Global GoogleLowerBarDark
 	Global CBC
 	Global CBCH
 	Global GoogleLowerBarCoords
@@ -119,15 +123,15 @@ RemoveTooltip() {
 	}
 	Click CaptureX, CaptureY
 	Run "https://www.google.com/"
-	Loop {
-		sleep 10
-	} until PixelGetColor(GoogleLowerBarCoordx, GoogleLowerBarCoordy) == GoogleLowerBar
-	sleep 50
-	send "^v"
-	sleep 100
-	while PixelGetColor(631, 576) == 0x28292a {
+	loop {
 		sleep 50
-	}
+	} until PixelGetColor(GoogleLowerBarCoordx, GoogleLowerBarCoordy) == GoogleLowerBarDark
+	global Debug := PixelGetColor(GoogleLowerBarCoordx, GoogleLowerBarCoordy) == GoogleLowerBarDark
+	loop {
+			Sleep 100
+			send "^v"
+	} until PixelGetColor(631, 576) == 0x28292a
+	
 	sleep 400
 	loop {
 		send "{Enter}"
@@ -145,4 +149,3 @@ Send "{Backspace}"
 Send "{Backspace}"
 Exitapp
 }
-
