@@ -1,7 +1,7 @@
 # I-excel
 Takes a screenshot of specific point and asks AI about it
 
-v1.06
+v1.061
 
 # Setup
 # Download Ahk
