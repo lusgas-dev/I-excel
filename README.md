@@ -16,9 +16,7 @@ Make sure that chrome is the default browser, to assure it is go to [chrome://se
 Another Chrome setting is the dark mode, to set it go to: [chrome://settings/appearance](url) and press apearence and dark
 
 ## Snipping Tool
-After that, go to settings>notifications then turn off Snipping Tool notifications.
-
-Open the snipping tool by pressing Ctrl+E
+Open the snipping tool by pressing Win+Shift+S then press Ctrl+E to make the symbol of a image with a pen turn blue
 ## Windows settings
 Make sure the color is set to blue
 
