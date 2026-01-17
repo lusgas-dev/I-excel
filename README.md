@@ -11,9 +11,9 @@ Enter the link https://www.autohotkey.com/download/ahk-v2.exe
 
 Open the file, in case you don't have admin access select current user and then do the following settups
 ## Chrome
-Make sure that chrome is the default browser, to assure it is go to [chrome://settings/defaultBrowser](url).
+Make sure that chrome is the default browser, to assure it is go to [chrome://settings/defaultBrowser](chrome://settings/defaultBrowser).
 
-Another Chrome setting is the dark mode, to set it go to: [chrome://settings/appearance](url) and press apearence and dark
+Another Chrome setting is the dark mode, to set it go to: [chrome://settings/appearance](chrome://settings/appearance) and press apearence and dark
 ## Snipping Tool
 Open the snipping tool by pressing Win+Shift+S then press Ctrl+E to make the symbol of a image with a pen turn blue
 ## Windows settings
