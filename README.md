@@ -11,7 +11,7 @@ Open the file, in case you don't have admin access select current user and then 
 ## Chrome
 Bookmarks bar open, it can be opened by pressing Ctrl+Shift+B
 
-Make sure that chrome is the default browser, to assure it is go to chrome://settings/defaultBrowser.
+Make sure that chrome is the default browser, to assure it is go to [chrome://settings/defaultBrowser](url).
 
 ## Snipping Tool
 After that, go to settings>notifications then turn off Snipping Tool notifications.
