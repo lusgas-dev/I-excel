@@ -1,7 +1,7 @@
-﻿#Requires AutoHotkey v2.0
+#Requires AutoHotkey v2.0
 #Singleinstance Force
 /*										I Excel 
-v1.04
+v1.05
 */
 
 SendMode "input"
@@ -15,9 +15,9 @@ Global GoogleLowerBarCoordx := "467"
 Global GoogleLowerBarCoordy := "1099"
 Global SelectionMade := ""
 Global ShowFirstMsgDox := IniRead("IExcel.ini",  "HelpPopup",  "Show",  2)
-global CurrentVersion := "1.04" 
-global VersionUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/Version.txt" 
-global DownloadUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/IExcel.ahk"
+Global CurrentVersion := "1.04" 
+Global VersionUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/Version.txt" 
+Global DownloadUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/IExcel.ahk"
 CheckForUpdates() {
     try {
 		Global CurrentVersion
@@ -27,10 +27,10 @@ CheckForUpdates() {
         whr.Open("GET", VersionUrl, false)
         whr.Send()
         whr.WaitForResponse()
-        LatestVersion := whr.ResponseText.Trim()
+        LatestVersion := trim(whr.ResponseText)
 
         if (LatestVersion != CurrentVersion) {
-		Result := MsgBox("An update is available (v" LatestVersion ") Would you like to download and install it now?", "Update Available", "YesNo IconQuestion")
+		Result := MsgBox("An update is available (v" LatestVersion ") Would you like to download and install it now?", "Update Available", "YesNo Icon?")
             if (Result == "Yes") {
                 whr.Open("GET", DownloadUrl, false)
                 whr.Send()
@@ -143,7 +143,4 @@ Send "{Backspace}"
 ~; & e:: {
 Send "{Backspace}"
 Exitapp
-
 }
-
-
