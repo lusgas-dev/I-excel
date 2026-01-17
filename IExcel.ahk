@@ -1,13 +1,13 @@
 #Requires AutoHotkey v2.0
 #Singleinstance Force
 /*										I Excel 
-v1.063
+v1.1
 */
 
 SendMode "input"
 CoordMode "Mouse"
 CoordMode "Pixel"
-CoordMode "ToolTip",  "Screen"
+CoordMode "Tooltip",  "Screen"
 Global CBC := "0x4CC2FF"
 Global CBCH := "0x48B2E9"
 Global GoogleLowerBarDark := "0x171717"
@@ -15,57 +15,80 @@ Global GoogleLowerBarLight := ""
 Global GoogleLowerBarCoordx := "483"
 Global GoogleLowerBarCoordy := "1098"
 Global SelectionMade := ""
-Global ShowFirstMsgDox := IniRead("IExcel.ini",  "HelpPopup",  "Show",  2)
-Global CurrentVersion := "1.063" 
-Global VersionUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/Version.txt" 
-Global DownloadUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/IExcel.ahk"
+Global ShowFirstMsgBox := IniRead("IExcel.ini",  "HelpPopup",  "Show",  2)
+Global ShowChangelog := IniRead("IExcel.ini",  "Changelog",  "Show",  2)
+Global CurrentVersion := "1.1"
 CheckForUpdates() {
-    try {
+	try {
 		Global CurrentVersion
-    	Global VersionUrl
-    	Global DownloadUrl
-        whr := ComObject("WinHttp.WinHttpRequest.5.1")
-        whr.Open("GET", VersionUrl, false)
-        whr.Send()
-        whr.WaitForResponse()
-        Global LatestVersion := trim(whr.ResponseText, " `t`r`n")
-        Global NewScriptName := ("IExcel_" LatestVersion ".ahk")
-        Global NewScriptPath := Format("{}\{}", A_ScriptDir, NewScriptName)
-        if (LatestVersion != CurrentVersion) {
-		Result := MsgBox("An update is available (v" LatestVersion ")`nWould you like to download and install it now?`nYour version: (v" CurrentVersion ")", "Update Available", "YesNo Icon?")
-            if (Result == "Yes") {
-                whr.Open("GET", DownloadUrl, false)
-                whr.Send()
-                whr.WaitForResponse()
-                NewScriptContent := whr.ResponseText
-                FileDelete A_ScriptFullPath
-                FileAppend NewScriptContent, NewScriptPath
-                MsgBox("Update complete. The script will now reload.", "Update Successful")
-                Run NewScriptPath
-            }
-        }
-    } catch {
-        MsgBox("Failed to check for updates. Error: " A_LastError, "Update Error", "Icon!")
-    }
+		VersionUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/Version.txt" 
+		DownloadUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/IExcel.ahk"
+		whr := ComObject("WinHttp.WinHttpRequest.5.1")
+		whr.Open("GET", VersionUrl, false)
+		whr.Send()
+		whr.WaitForResponse()
+		Global LatestVersion := trim(whr.ResponseText, " `t`r`n")
+		NewScriptName := ("IExcel_" LatestVersion ".ahk")
+		NewScriptPath := Format("{}\{}", A_ScriptDir, NewScriptName)
+		Global VersionCheck := StrCompare(LatestVersion,  CurrentVersion) > 0
+		Global VersionEqualCheck := StrCompare(LatestVersion,  CurrentVersion) = 0
+		if  VersionCheck = 1{
+			Result := MsgBox("An update is available (v" LatestVersion ")`nWould you like to download and install it now?`nYour version: (v" CurrentVersion ")", "Update Available", 4132)
+			if (Result == "Yes") {
+				whr.Open("GET", DownloadUrl, false)
+				whr.Send()
+				whr.WaitForResponse()
+				NewScriptContent := whr.ResponseText
+				FileDelete A_ScriptFullPath
+				FileAppend NewScriptContent, NewScriptPath
+				IniWrite(0, "IExcel.ini", "Changelog", "Show")
+				MsgBox("Update complete. The script will now reload.", "Update Successful")
+				ExitApp
+				Run NewScriptPath
+			}
+		} else {
+			if VersionEqualCheck =1 {
+			} else {
+				Tooltip "Beta tester mode activated"
+				RemoveTooltip()
+				sleep 2000
+			}
+		}
+	} catch {
+	MsgBox("Failed to check for updates. Error: " A_LastError, "Update Error", "Icon!")
+	}
 }
 CheckForUpdates()
-if ShowFirstMsgDox == 0 {
+ChangelogIniCheck() {
+	if ShowChangelog == 2{
+		IniWrite(0, "IExcel.ini", "Changelog", "Show")
+	}
+}
+ChangelogIniCheck()
+Changelog() {
+	If ShowChangelog == 0 {
+		MsgBox("	       Changelog v" CurrentVersion "                        `n`n`n#Added changelog`n#Bugfixes`n`n`n", "Changelog",  262208)
+		IniWrite(1, "IExcel.ini", "Changelog", "Show")
+	}
+}
+Changelog() 
+if ShowFirstMsgBox == 0 {
 OnMessage(WM_HELP := 0x0053, (*) => IExcelHelp())
 	g := Gui("+OwnDialogs")
-	fmsgDox := MsgBox("Press `;+h for help or button help below", "TOTALLY NOT cheats", 20480)
-	if fmsgDox == "OK"{
-		SMsgDox := MsgBox("Show this popup next time?", "" , 260)
-		if SMsgDox == "No" {
+	fMsgBox := MsgBox("Press `;+h for help or button help below", "TOTALLY NOT cheats", 20480)
+	if fMsgBox == "OK"{
+		SMsgBox := MsgBox("Show this popup next time?", "Show popup?" , 260)
+		if SMsgBox == "No" {
 		IniWrite(1, "IExcel.ini", "HelpPopup", "Show")
 		}
 	}
 }
-	if ShowFirstMsgDox == 1 {
+	if ShowFirstMsgBox == 1 {
 	Global CurrentVersion
-	ToolTip("Script is running. Current version: " . CurrentVersion), 0,  0
+	Tooltip("Script is running. Current version: " . CurrentVersion), 0,  0
 	RemoveTooltip()
 	}
-		if ShowFirstMsgDox == 2 {
+		if ShowFirstMsgBox == 2 {
 			FileAppend "[HelpPopup]`nShow=0", A_ScriptDir "\IExcel.ini"
 			Reload
 			}
@@ -76,14 +99,14 @@ IExcelHelp() {
 	}
 }
 ~; & j:: {
-	ToolTip "Press J to select the first corner of the screenshot"
+	Tooltip "Press J to select the first corner of the screenshot"
 	RemoveTooltip()
 	KeyWait "j", "U"
 	KeyWait "j", "D"
 	MouseGetPos &Sr1x, &Sr1y
 	Global Scr1x := Sr1x
 	Global Scr1y := Sr1y
-	ToolTip "Press J to select the second corner of the screenshot"
+	Tooltip "Press J to select the second corner of the screenshot"
 	RemoveTooltip()
 	KeyWait "j", "U"
 	KeyWait "j", "D"
@@ -91,7 +114,7 @@ IExcelHelp() {
 	Global Scr2x := Sr2x
 	Global Scr2y := Sr2y
 	Global SelectionMade := 1
-	ToolTip "Press `;+c to start"
+	Tooltip "Press `;+c to start"
 	RemoveTooltip()
 }
 ~; & h:: {
