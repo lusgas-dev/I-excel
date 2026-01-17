@@ -20,6 +20,9 @@ global VersionUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/
 global DownloadUrl := "https://raw.githubusercontent.com/lusgas-dev/I-excel/refs/heads/main/IExcel.ahk"
 CheckForUpdates() {
     try {
+		Global CurrentVersion
+    	Global VersionUrl
+    	Global DownloadUrl
         whr := ComObject("WinHttp.WinHttpRequest.5.1")
         whr.Open("GET", VersionUrl, false)
         whr.Send()
@@ -142,4 +145,5 @@ Send "{Backspace}"
 Exitapp
 
 }
+
 
