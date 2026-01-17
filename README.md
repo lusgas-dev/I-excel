@@ -23,7 +23,7 @@ Color can be changed at: Personalization>Colors
 
 Hover over the colors until you get blue
 # Download
-You will find the download here: https://github.com/lusgas-dev/I-excel/releases/tag/v1.06
+You will find the download here: https://github.com/lusgas-dev/I-excel/releases/tag/Installer
 ### Keybinds
 Press ; + h for help (goes to this website and shows a popup with enough information after setup)
 Press ; + j to set the corners of the screenshot being taken
