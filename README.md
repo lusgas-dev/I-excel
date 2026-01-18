@@ -3,7 +3,7 @@
 # I-excel
 Takes a screenshot of specific point and asks AI about it
 
-v1.1
+v1.2
 
 # Setup
 # Download Ahk
@@ -15,7 +15,7 @@ Make sure that chrome is the default browser, to assure it is go to [chrome://se
 
 Another Chrome setting is the dark mode, to set it go to: [chrome://settings/appearance](chrome://settings/appearance) and press apearence and dark
 ## Snipping Tool
-Open the snipping tool by pressing Win+Shift+S then press Ctrl+E to make the symbol of a image with a pen turn blue
+Open the snipping tool by searching in the search bar, go to the three dots, settings and deactivate auto save screenshots
 ## Windows settings
 Make sure the color is set to blue
 
