@@ -1,23 +1,24 @@
 #Requires AutoHotkey v2.0
 #Singleinstance Force
 /*										I Excel 
-v1.1
+v1.2
 */
 
 SendMode "input"
 CoordMode "Mouse"
 CoordMode "Pixel"
 CoordMode "Tooltip",  "Screen"
-Global CBC := "0x4CC2FF"
-Global CBCH := "0x48B2E9"
-Global GoogleLowerBarDark := "0x171717"
 Global GoogleLowerBarLight := ""
 Global GoogleLowerBarCoordx := "483"
 Global GoogleLowerBarCoordy := "1098"
-Global SelectionMade := ""
 Global ShowFirstMsgBox := IniRead("IExcel.ini",  "HelpPopup",  "Show",  2)
 Global ShowChangelog := IniRead("IExcel.ini",  "Changelog",  "Show",  2)
-Global CurrentVersion := "1.1"
+Global CurrentVersion := "1.2"
+Global SelectionMade := IniRead("IExcel.ini",  "Coords",  "SelectionMade",  0)
+Global Scr1x := IniRead("IExcel.ini", "Coords", "Scr1x",  "")
+Global Scr1y := IniRead("IExcel.ini", "Coords", "Scr1y",  "")
+Global Scr2x := IniRead("IExcel.ini", "Coords", "Scr2x",  "")
+Global Scr2y := IniRead("IExcel.ini", "Coords", "Scr2y",  "")
 CheckForUpdates() {
 	try {
 		Global CurrentVersion
@@ -27,11 +28,11 @@ CheckForUpdates() {
 		whr.Open("GET", VersionUrl, false)
 		whr.Send()
 		whr.WaitForResponse()
-		Global LatestVersion := trim(whr.ResponseText, " `t`r`n")
+		LatestVersion := trim(whr.ResponseText, " `t`r`n")
 		NewScriptName := ("IExcel_" LatestVersion ".ahk")
 		NewScriptPath := Format("{}\{}", A_ScriptDir, NewScriptName)
-		Global VersionCheck := StrCompare(LatestVersion,  CurrentVersion) > 0
-		Global VersionEqualCheck := StrCompare(LatestVersion,  CurrentVersion) = 0
+		VersionCheck := StrCompare(LatestVersion,  CurrentVersion) > 0
+		VersionEqualCheck := StrCompare(LatestVersion,  CurrentVersion) = 0
 		if  VersionCheck = 1{
 			Result := MsgBox("An update is available (v" LatestVersion ")`nWould you like to download and install it now?`nYour version: (v" CurrentVersion ")", "Update Available", 4132)
 			if (Result == "Yes") {
@@ -43,8 +44,8 @@ CheckForUpdates() {
 				FileAppend NewScriptContent, NewScriptPath
 				IniWrite(0, "IExcel.ini", "Changelog", "Show")
 				MsgBox("Update complete. The script will now reload.", "Update Successful")
-				ExitApp
 				Run NewScriptPath
+				ExitApp
 			}
 		} else {
 			if VersionEqualCheck =1 {
@@ -67,7 +68,7 @@ ChangelogIniCheck() {
 ChangelogIniCheck()
 Changelog() {
 	If ShowChangelog == 0 {
-		MsgBox("	       Changelog v" CurrentVersion "                        `n`n`n#Added changelog`n#Bugfixes`n`n`n", "Changelog",  262208)
+		MsgBox("	       Changelog v" CurrentVersion "                        `n`n`n#Added save coordinates`n#Screenshot now works with the quick markup`n#Bugfixes`n`n`n", "Changelog",  262208)
 		IniWrite(1, "IExcel.ini", "Changelog", "Show")
 	}
 }
@@ -125,27 +126,26 @@ RemoveTooltip() {
 	Settimer () => Tooltip(), -3000
 }
 ~; & c::{
-	Global GoogleLowerBarDark
-	Global CBC
-	Global CBCH
-	Global GoogleLowerBarCoords
+	Global CBC := "0x4CC2FF"
+	Global CBCH := "0x48B2E9"
 	Global SelectionMade
 	Global Scr1x
 	Global Scr1y
 	Global Scr2x
 	Global Scr2y
+	GoogleLowerBarDark := "0x171717"
 	if SelectionMade == 1{
 		Send "{Backspace}"
 		Send "{PrintScreen}"
 		WinWait("ahk_exe SnippingTool.exe")
+		QuickMarkupx := "952"
+		QuickMarkupy := "76"
 		sleep 500
 		MouseClickDrag "L", Scr1x, Scr1y, Scr2x, Scr2y, 90
 		sleep 50
-		CaptureX := ""
-		While CaptureX == ""  {
-			PixelSearch &CaptureX, &CaptureY, 0, 79, 1920, 1130, CBC
+		If PixelGetColor(QuickMarkupx, QuickMarkupy) == CBC {
+			Click
 		}
-		Click CaptureX, CaptureY
 		Run "https://www.google.com/"
 		loop {
 			sleep 50
@@ -165,7 +165,19 @@ RemoveTooltip() {
 			PixelSearch &GaiX, &GaiY, 0, 87, 319, 313, 0x0DBC5F
 		}
 	} else {
-		MsgBox "No area was selected, press `;+h for help"
+		MsgBox "No area was selected, press `;+j to select"
+	}
+}
+~; & s:: {
+	If SelectionMade == 1{
+		IniWrite(1, "IExcel.ini", "Coords", "SelectionMade")
+		IniWrite(Scr1x, "IExcel.ini", "Coords", "Scr1x")
+		IniWrite(Scr1y, "IExcel.ini", "Coords", "Scr1y")
+		IniWrite(Scr2x, "IExcel.ini", "Coords", "Scr2x")
+		IniWrite(Scr2y, "IExcel.ini", "Coords", "Scr2y")
+		MsgBox "Your selection was saved"
+	} else {
+		MsgBox "No area was selected, press `;+j to select"
 	}
 }
 ~; & r:: {
