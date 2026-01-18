@@ -26,11 +26,17 @@ Hover over the colors until you get blue
 You will find the download here: https://github.com/lusgas-dev/I-excel/releases/tag/Installer
 ### Keybinds
 Press ; + h for help (goes to this website and shows a popup with enough information after setup)
+
 Press ; + j to set the corners of the screenshot being taken
+
 Press ; + c to start the main function
+
 Press ; + e to exit
+
 Press ; + r to reload
+
 Press ; + s to save the selections for the next iteration of the program
+
 in case of errors where you get soft locked press ; + r or ; + e
 
 
