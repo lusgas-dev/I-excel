@@ -30,7 +30,8 @@ Press ; + j to set the corners of the screenshot being taken
 Press ; + c to start the main function
 Press ; + e to exit
 Press ; + r to reload
-in case of errors where you get soft locked press ; + r
+Press ; + s to save the selections for the next iteration of the program
+in case of errors where you get soft locked press ; + r or ; + e
 
 
 
