@@ -155,7 +155,7 @@ RemoveTooltip() {
 		LoadingX := ""
 		while LoadingX == "" {
 			send "^v"
-			sleep 
+			sleep 1000
 			PixelSearch &LoadingX, &LoadingY, 36, 215, 1637, 830, 0x28292a
 		}
 		GaiX := ""
@@ -188,3 +188,4 @@ Send "{Backspace}"
 Send "{Backspace}"
 Exitapp
 }
+
