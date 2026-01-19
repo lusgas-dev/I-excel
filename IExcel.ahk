@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 #Singleinstance Force
 /*										I Excel 
-v1.2
+v1.2.1
 */
 
 SendMode "input"
@@ -13,7 +13,7 @@ Global GoogleLowerBarCoordx := "483"
 Global GoogleLowerBarCoordy := "1098"
 Global ShowFirstMsgBox := IniRead("IExcel.ini",  "HelpPopup",  "Show",  2)
 Global ShowChangelog := IniRead("IExcel.ini",  "Changelog",  "Show",  2)
-Global CurrentVersion := "1.2"
+Global CurrentVersion := "1.2.1"
 Global SelectionMade := IniRead("IExcel.ini",  "Coords",  "SelectionMade",  0)
 Global Scr1x := IniRead("IExcel.ini", "Coords", "Scr1x",  "")
 Global Scr1y := IniRead("IExcel.ini", "Coords", "Scr1y",  "")
@@ -68,7 +68,7 @@ ChangelogIniCheck() {
 ChangelogIniCheck()
 Changelog() {
 	If ShowChangelog == 0 {
-		MsgBox("	       Changelog v" CurrentVersion "                        `n`n`n#Added save coordinates`n#Screenshot now works with the quick markup`n#Bugfixes`n`n`n", "Changelog",  262208)
+		MsgBox("	       Changelog v" CurrentVersion "                        `n`n`nThis version was mainly bugfixes:`n#Screenshot now ACTUALLY works with the quick markup`n#Delay after ctrl + v got increased`n`n`n", "Changelog",  262208)
 		IniWrite(1, "IExcel.ini", "Changelog", "Show")
 	}
 }
@@ -126,26 +126,27 @@ RemoveTooltip() {
 	Settimer () => Tooltip(), -3000
 }
 ~; & c::{
-	Global CBC := "0x4CC2FF"
+	Global QuickMarkupColor := "0x47B1E8"
 	Global CBCH := "0x48B2E9"
 	Global SelectionMade
 	Global Scr1x
 	Global Scr1y
 	Global Scr2x
 	Global Scr2y
+	Global QuickMarkupx := "946"
+	Global QuickMarkupy := "31"
 	GoogleLowerBarDark := "0x171717"
 	if SelectionMade == 1{
 		Send "{Backspace}"
 		Send "{PrintScreen}"
 		WinWait("ahk_exe SnippingTool.exe")
-		QuickMarkupx := "952"
-		QuickMarkupy := "76"
-		sleep 500
-		MouseClickDrag "L", Scr1x, Scr1y, Scr2x, Scr2y, 90
-		sleep 50
-		If PixelGetColor(QuickMarkupx, QuickMarkupy) == CBC {
-			Click
+		sleep 100
+		QuickMarkupOn := PixelGetColor(QuickMarkupx,  QuickMarkupy)
+		If QuickMarkupOn == QuickMarkupColor{
+			Send "^e"
+			sleep 50
 		}
+		MouseClickDrag "L", Scr1x, Scr1y, Scr2x, Scr2y, 90
 		Run "https://www.google.com/"
 		loop {
 			sleep 50
@@ -154,10 +155,9 @@ RemoveTooltip() {
 		LoadingX := ""
 		while LoadingX == "" {
 			send "^v"
-			sleep 5
+			sleep 
 			PixelSearch &LoadingX, &LoadingY, 36, 215, 1637, 830, 0x28292a
 		}
-		sleep 400
 		GaiX := ""
 		while GaiX == "" {
 			send "{Enter}"
