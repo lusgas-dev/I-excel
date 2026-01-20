@@ -1,10 +1,10 @@
 #Requires AutoHotkey v2.0
 #Singleinstance Force
 /*										I Excel 
-v1.2.2
+v1.2.3
 */
 
-SendMode "input"
+SendMode "Event"
 CoordMode "Mouse"
 CoordMode "Pixel",  "Screen"
 CoordMode "Tooltip",  "Screen"
@@ -13,7 +13,7 @@ Global GoogleLowerBarCoordx := "483"
 Global GoogleLowerBarCoordy := "1098"
 Global ShowFirstMsgBox := IniRead("IExcel.ini",  "HelpPopup",  "Show",  2)
 Global ShowChangelog := IniRead("IExcel.ini",  "Changelog",  "Show",  2)
-Global CurrentVersion := "1.2.2"
+Global CurrentVersion := "1.2.3"
 Global SelectionMade := IniRead("IExcel.ini",  "Coords",  "SelectionMade",  0)
 Global Scr1x := IniRead("IExcel.ini", "Coords", "Scr1x",  "")
 Global Scr1y := IniRead("IExcel.ini", "Coords", "Scr1y",  "")
@@ -67,7 +67,7 @@ ChangelogIniCheck() {
 ChangelogIniCheck()
 Changelog() {
 	If ShowChangelog == 0 {
-		MsgBox("	       Changelog v" CurrentVersion "                        `n`n#Delay after ctrl + v ACTUALLY got increased`n`n`n#Bugfixes`n`n", "Changelog",  262208)
+		MsgBox("	       Changelog v" CurrentVersion "                        `n`n#App wasn't working as intended`n`n", "Changelog",  262208)
 		IniWrite(1, "IExcel.ini", "Changelog", "Show")
 	}
 }
@@ -145,25 +145,36 @@ RemoveTooltip() {
 		
 		Global QuickMarkupOn := PixelGetColor(QuickMarkupx,  QuickMarkupy)
 		
-		MarkupTimer := 20
+		Global MarkupTimer := 20
 		if QuickMarkupOn != QuickMarkupColor {
-			While MarkupTimer != 0{
-				Send "^e"
-				sleep 500
-				MarkupTimer := --MarkupTimer
-				QuickMarkupOn := PixelGetColor(QuickMarkupx,  QuickMarkupy)
-			}
+			loop {
+				if QuickMarkupOn != QuickMarkupColor {
+					Send "^e"
+					sleep 500
+					QuickMarkupOn := PixelGetColor(QuickMarkupx,  QuickMarkupy)
+					If QuickMarkupOn == QuickMarkupColor {
+						Break
+					}
+				} else {
+					MarkupTimer := --MarkupTimer
+					Sleep 500
+				}
+			} Until MarkupTimer == "-1"
 		}
 		
-		If MarkupTimer == 0 {
-			Reload
+		If MarkupTimer == "-1" {
+			ToolTip "Reload"
+			RemoveTooltip()
 		}
 		
 		QuickMarkupOn := PixelGetColor(QuickMarkupx,  QuickMarkupy)
 		
 		loop {
-			MouseClickDrag "L", Scr1x, Scr1y, Scr2x, Scr2y, 9
 			QuickMarkupOn := PixelGetColor(QuickMarkupx,  QuickMarkupy)
+			if QuickMarkupOn != QuickMarkupColor{
+				Break
+			}
+			MouseClickDrag "L", Scr1x, Scr1y, Scr2x, Scr2y, 5
 			Sleep 500
 		} Until QuickMarkupOn != QuickMarkupColor
 		
@@ -223,4 +234,3 @@ Send "{Backspace}"
 Send "{Backspace}"
 Exitapp
 }
-
