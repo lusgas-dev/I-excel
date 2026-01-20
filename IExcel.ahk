@@ -67,7 +67,7 @@ ChangelogIniCheck() {
 ChangelogIniCheck()
 Changelog() {
 	If ShowChangelog == 0 {
-		MsgBox("	       Changelog v" CurrentVersion "                        `n`n#Delay after ctrl + v ACTUALLY got increased`n`n`n", "Changelog",  262208)
+		MsgBox("	       Changelog v" CurrentVersion "                        `n`n#Delay after ctrl + v ACTUALLY got increased`n`n`n#Bugfixes`n`n", "Changelog",  262208)
 		IniWrite(1, "IExcel.ini", "Changelog", "Show")
 	}
 }
@@ -223,3 +223,4 @@ Send "{Backspace}"
 Send "{Backspace}"
 Exitapp
 }
+
