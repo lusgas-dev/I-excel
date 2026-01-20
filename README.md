@@ -17,11 +17,7 @@ Another Chrome setting is the dark mode, to set it go to: [chrome://settings/app
 ## Snipping Tool
 Open the snipping tool by searching in the search bar, go to the three dots, settings and deactivate auto save screenshots
 ## Windows settings
-Make sure the color is set to blue
-
-Color can be changed at: Personalization>Colors
-
-Hover over the colors until you get blue
+Make sure windows is in dark mode
 # Download
 You will find the download here: https://github.com/lusgas-dev/I-excel/releases/tag/Installer
 ### Keybinds
