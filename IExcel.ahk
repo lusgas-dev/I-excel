@@ -1,19 +1,19 @@
 #Requires AutoHotkey v2.0
 #Singleinstance Force
 /*										I Excel 
-v1.2.1
+v1.2.2
 */
 
 SendMode "input"
 CoordMode "Mouse"
-CoordMode "Pixel"
+CoordMode "Pixel",  "Screen"
 CoordMode "Tooltip",  "Screen"
 Global GoogleLowerBarLight := ""
 Global GoogleLowerBarCoordx := "483"
 Global GoogleLowerBarCoordy := "1098"
 Global ShowFirstMsgBox := IniRead("IExcel.ini",  "HelpPopup",  "Show",  2)
 Global ShowChangelog := IniRead("IExcel.ini",  "Changelog",  "Show",  2)
-Global CurrentVersion := "1.2.1"
+Global CurrentVersion := "1.2.2"
 Global SelectionMade := IniRead("IExcel.ini",  "Coords",  "SelectionMade",  0)
 Global Scr1x := IniRead("IExcel.ini", "Coords", "Scr1x",  "")
 Global Scr1y := IniRead("IExcel.ini", "Coords", "Scr1y",  "")
@@ -50,9 +50,8 @@ CheckForUpdates() {
 		} else {
 			if VersionEqualCheck =1 {
 			} else {
-				Tooltip "Beta tester mode activated"
-				RemoveTooltip()
-				sleep 2000
+				;Beta test stuff goes here
+				IniWrite(0, "IExcel.ini", "Changelog", "Show")
 			}
 		}
 	} catch {
@@ -68,7 +67,7 @@ ChangelogIniCheck() {
 ChangelogIniCheck()
 Changelog() {
 	If ShowChangelog == 0 {
-		MsgBox("	       Changelog v" CurrentVersion "                        `n`n`nThis version was mainly bugfixes:`n#Screenshot now ACTUALLY works with the quick markup`n#Delay after ctrl + v got increased`n`n`n", "Changelog",  262208)
+		MsgBox("	       Changelog v" CurrentVersion "                        `n`n#Delay after ctrl + v ACTUALLY got increased`n`n`n", "Changelog",  262208)
 		IniWrite(1, "IExcel.ini", "Changelog", "Show")
 	}
 }
@@ -126,43 +125,79 @@ RemoveTooltip() {
 	Settimer () => Tooltip(), -3000
 }
 ~; & c::{
-	Global QuickMarkupColor := "0x47B1E8"
-	Global CBCH := "0x48B2E9"
 	Global SelectionMade
 	Global Scr1x
 	Global Scr1y
 	Global Scr2x
 	Global Scr2y
-	Global QuickMarkupx := "946"
-	Global QuickMarkupy := "31"
+	QuickMarkupx := "946"
+	QuickMarkupy := "76"
 	GoogleLowerBarDark := "0x171717"
 	if SelectionMade == 1{
 		Send "{Backspace}"
+		
 		Send "{PrintScreen}"
+		
 		WinWait("ahk_exe SnippingTool.exe")
-		sleep 100
-		QuickMarkupOn := PixelGetColor(QuickMarkupx,  QuickMarkupy)
-		If QuickMarkupOn == QuickMarkupColor{
-			Send "^e"
-			sleep 50
+		
+		sleep 1000
+		QuickMarkupColor := "0x1F1F1F"
+		
+		Global QuickMarkupOn := PixelGetColor(QuickMarkupx,  QuickMarkupy)
+		
+		MarkupTimer := 20
+		if QuickMarkupOn != QuickMarkupColor {
+			While MarkupTimer != 0{
+				Send "^e"
+				sleep 500
+				MarkupTimer := --MarkupTimer
+				QuickMarkupOn := PixelGetColor(QuickMarkupx,  QuickMarkupy)
+			}
 		}
-		MouseClickDrag "L", Scr1x, Scr1y, Scr2x, Scr2y, 90
+		
+		If MarkupTimer == 0 {
+			Reload
+		}
+		
+		QuickMarkupOn := PixelGetColor(QuickMarkupx,  QuickMarkupy)
+		
+		loop {
+			MouseClickDrag "L", Scr1x, Scr1y, Scr2x, Scr2y, 9
+			QuickMarkupOn := PixelGetColor(QuickMarkupx,  QuickMarkupy)
+			Sleep 500
+		} Until QuickMarkupOn != QuickMarkupColor
+		
 		Run "https://www.google.com/"
+		
 		loop {
 			sleep 50
 		} until PixelGetColor(GoogleLowerBarCoordx, GoogleLowerBarCoordy) == GoogleLowerBarDark
-		global Debug := PixelGetColor(GoogleLowerBarCoordx, GoogleLowerBarCoordy) == GoogleLowerBarDark
-		LoadingX := ""
-		while LoadingX == "" {
-			send "^v"
-			sleep 1000
+		
+		Loading := 0
+		
+		While  Loading == 0 {
 			PixelSearch &LoadingX, &LoadingY, 36, 215, 1637, 830, 0x28292a
+			Send "^v"
+			If LoadingX != "" {
+				Loading := 1
+			}
 		}
+		
+		While Loading == 1 {
+			PixelSearch &LoadingX, &LoadingY, 36, 215, 1637, 830, 0x28292a
+			LoadingThere := PixelGetColor(LoadingX,  LoadingY)
+			sleep 5
+			If LoadingThere = "0x28292a"{
+				Loading := 0
+			}
+		}
+		
 		GaiX := ""
+		
 		while GaiX == "" {
 			send "{Enter}"
 			sleep 1000
-			PixelSearch &GaiX, &GaiY, 0, 87, 319, 313, 0x0DBC5F
+			PixelSearch &GaiX, &GaiY, 0, 87, 319, 313, 0x17181F
 		}
 	} else {
 		MsgBox "No area was selected, press `;+j to select"
@@ -188,4 +223,3 @@ Send "{Backspace}"
 Send "{Backspace}"
 Exitapp
 }
-
