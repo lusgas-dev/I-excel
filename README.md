@@ -12,7 +12,7 @@ Enter the link https://www.autohotkey.com/download/ahk-v2.exe
 Open the file, in case you don't have admin access select current user and then do the following settups
 ## Browser
 Make sure your browser is in dark mode
-## Snipping Tool
+## Snipping Tool(Recomended, but optional)
 Open the snipping tool by searching in the search bar, go to the three dots, settings and deactivate auto save screenshots
 # Download
 You will find the download here: https://github.com/lusgas-dev/I-excel/releases/tag/Installer
