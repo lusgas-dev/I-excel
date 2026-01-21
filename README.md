@@ -7,7 +7,7 @@ v1.2.3
 
 # Setup
 # Download Ahk
-Enter the link https://www.autohotkey.com/download/ahk-v2.exe
+Enter the [link]([url](https://www.autohotkey.com/download/ahk-v2.exe))
 
 Open the file, in case you don't have admin access select current user and then do the following settups
 ## Browser
@@ -15,7 +15,7 @@ Make sure your browser is in dark mode
 ## Snipping Tool(Recomended)
 Open the snipping tool by searching in the search bar, go to the three dots, settings and deactivate auto save screenshots
 # Download
-You will find the download here: https://github.com/lusgas-dev/I-excel/releases/tag/Installer
+You will find the download [here]([url](https://github.com/lusgas-dev/I-excel/releases/download/Installer/IExcel_Installer.ahk))
 ### Keybinds
 Press ; + h for help (goes to this website and shows a popup with enough information after setup)
 
